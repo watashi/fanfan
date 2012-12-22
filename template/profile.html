@@ -1,0 +1,121 @@
+<h1>FanFan</h1>
+
+<h2>{{ account.name }}</h2>
+
+<p>
+{% if balance < 0 %}
+    您当前账户的余额为<font color="red"><big>¥{{ balance }}</big></font>，已欠费，请及时缴清欠款！
+{% else %}
+    {% if balance < 16 %}
+        您当前账户的余额为<font color="orange"><big>¥{{ balance }}</big></font>，请及时充值。
+    {% else %}
+        您当前账户的余额为<font color="green"><big>¥{{ balance }}</big></font>，可以考虑bg大家。
+    {% endif %}
+{% endif %}
+</p>
+<hr/>
+
+<h4>转账</h4>
+<form method="post"  action="/pia/fanfan/gao/transfer/">
+    {% csrf_token %}
+    <table>
+        <tr>
+            <td>您的密码</td>
+            <td><input type="password" name="password"/></td>
+        </tr>
+        <tr>
+            <td>转账给</td>
+            <td><input type="text" name="to"/></td>
+        </tr>
+        <tr>
+            <td>转账金额</td>
+            <td><input type="text" name="amount"/></td>
+        </tr>
+        <tr>
+            <td>备注</td>
+            <td><input type="text" name="comment"/></td>
+        </tr>
+        <tr>
+            <td colspan="2"><input type="submit" value="转帐"/></td>
+        </tr>
+    </table>
+</form>
+<hr/>
+
+<h4>预定</h4>
+
+<table>
+    {% for good, booked in good_list %}
+    <tr>
+        <th><a href="/pia/fanfan/gao/list/{{ good.name }}/">{{ good }}</a></th>
+        <td>
+            <form method="post" action="/pia/fanfan/gao/{% if booked %}unbook{% else %}book{% endif %}/">
+                {% csrf_token %}
+                <input type="hidden" name="good" value="{{ good.name }}"/>
+                {% if booked %}
+                <input type="submit" value="退订" style="color:red"/>
+                {% else %}
+                <input type="submit" value="预定" style="color:green"/>
+                {% endif %}
+            </form>
+        </td>
+    {% endfor %}
+</table>
+
+<hr/>
+
+<h4>收入</h4>
+<table style="text-align:center;">
+    <tr>
+        <th>#</th>
+        <th>来源</th>
+        <th>数额</th>
+        <th>时间</th>
+        <th>备注</th>
+    </tr>
+    {% for r in receive_list %}
+    <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ r.account_from.name }}</td>
+        <td>{{ r.amount }}</td>
+        <td>{{ r.created_at }}</td>
+        <td>{{ r.comment }}</td>
+    </tr>
+    {% endfor %}
+</table>
+<hr/>
+
+<h4>支出</h4>
+<table style="text-align:center">
+    <tr>
+        <th>#</th>
+        <th>对象</th>
+        <th>数额</th>
+        <th>时间</th>
+        <th>备注</th>
+    </tr>≈
+    {% for r in send_list %}
+    <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ r.account_to.name }}</td>
+        <td>{{ r.amount }}</td>
+        <td>{{ r.created_at }}</td>
+        <td>{{ r.comment }}</td>
+    </tr>
+    {% endfor %}
+</table>
+<hr/>
+
+<h4>退出</h4>
+<form method="post"  action="/pia/fanfan/gao/logout/">
+    {% csrf_token %}
+    <table>
+        <tr>
+            <td>当前用户</td>
+            <td>{{ user.username }}</td>
+        </tr>
+        <tr>
+            <td colspan="2"><input type="submit" value="退出"/></td>
+        </tr>
+    </table>
+</form>

@@ -1,0 +1,77 @@
+<h1>FanFan</h1>
+
+{% if user.is_authenticated %}
+
+<h4>控制面板</h4>
+<a href="/pia/fanfan/gao/profile/">访问控制面板</a>
+<hr/>
+
+<h4>退出</h4>
+<form method="post"  action="/pia/fanfan/gao/logout/">
+    {% csrf_token %}
+    <table>
+        <tr>
+            <td>当前用户</td>
+            <td>{{ user.username }}</td>
+        </tr>
+        <tr>
+            <td colspan="2"><input type="submit" value="退出"/></td>
+        </tr>
+    </table>
+</form>
+<hr/>
+
+{% else %}
+
+<h4>注册</h4>
+<form method="post" action="/pia/fanfan/gao/register/">
+    {% csrf_token %}
+    <table>
+        <tr>
+            <td>用户名</td>
+            <td><input type="text" name="username"/></td>
+        </tr>
+        <tr>
+            <td>密码</td>
+            <td><input type="password" name="password"/></td>
+        </tr>
+        <tr>
+            <td>密码</td>
+            <td><input type="password" name="password2"/></td>
+        </tr>
+        <tr>
+            <td colspan="2"><center><input type="submit" value="注册"/></center></td>
+        </tr>
+    </table>
+</form>
+<hr/>
+
+<h4>登录</h4>
+<form method="post" action="/pia/fanfan/gao/login/">
+    {% csrf_token %}
+    <table>
+        <tr>
+            <td>用户名</td>
+            <td><input type="text" name="username"/></td>
+        </tr>
+        <tr>
+            <td>密码</td>
+            <td><input type="password" name="password"/></td>
+        </tr>
+        <tr>
+            <td colspan="2"><center><input type="submit" value="登录"/></center></td>
+        </tr>
+    </table>
+</form>
+<hr/>
+
+{% endif %}
+
+<ul>
+{% for good in good_list %}
+    <li><a href="/pia/fanfan/gao/list/{{ good.name }}/">{{ good }}</a></li>
+{% endfor %}
+</ul>
+
+
+

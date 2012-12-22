@@ -1,0 +1,25 @@
+<h1>FanFan</h1>
+
+<h2>{{ good.name }}</h2>
+
+<p>
+<big>单价：¥<big>{{ good.price }}</big></big>
+</p>
+
+<hr/>
+
+<a href="/">回到主页</a><br/>
+{% if user.is_authenticated %}
+<a href="/pia/fanfan/gao/profile/">返回控制面板</a>
+{% endif %}
+
+<hr/>
+
+<p>
+已有<big><strong>{{ account_list|length }}</strong></big>人订购了<big><em>{{ good.name }}</em></big>：
+<ul>
+    {% for accout in account_list|dictsort:"name" %}
+    <li>{{ accout.name }}</li>
+    {% endfor %}
+</ul>
+</p>
